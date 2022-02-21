@@ -1,7 +1,9 @@
-import requests, wget
-import re, os
-from bs4 import BeautifulSoup
 import datetime
+import os
+import re
+
+import requests
+from bs4 import BeautifulSoup
 
 
 class APOD:
@@ -21,7 +23,7 @@ class APOD:
         # i.e. `example.jpg` => `example`, `jpg`
         title, extension = filename.split('.')
 
-        # It's not really a CSV file; we have to clean it a bit.
+        # We have to clean the info a bit
         info = self.parse_page_text(page_text)
 
         self.url: str = url
@@ -32,26 +34,29 @@ class APOD:
         return self
 
     def parse_page_text(page_text: str):
+        """Parses page text into a vector where each element is `[category]:[content]`"""
+        # `split(',')` creates a problem where the `explanation` category is divided into multiple sections
         info = page_text.split(',')
 
-        """
+        # beginning of `explanation` section starts with 'explanation:'
         explanation_i = [i for i, line in enumerate(info) if 'explanation:' in line][0]
+        # end of `explanation` section ends at the `hdurl` section
         explanation_f = [i for i, line in enumerate(info) if 'hdurl:' in line][0] - 1
-        extra_info = [line for line in info if  not ':' in line.split()[0]]
 
+        # collecting the `explanation` section into a single string
         explanation = ''
         for line in info[explanation_i:explanation_f]:
-            line = line.replace('\n', '')
             explanation += line
 
+        # correcting the split(',') problem by subbing our `explanation` string and getting rid of extra lines
         result = [line for line in info if ':' in line.split()[0]]
         result[explanation_i] = explanation
-        """
 
-        return info
+        return result
 
 
 def get_page_text() -> str:
+    """Gets raw API text and removes extraneous characters"""
     # Get raw HTML from webpage
     page = requests.get('https://api.nasa.gov/planetary/apod'
                         '?api_key=DEMO_KEY')
@@ -79,13 +84,12 @@ def download_image(basedir: str = os.path.dirname(__file__)):
         os.mkdir(subdir)
 
     image_path = os.path.join(subdir, f'{apod.title}.{apod.extension}')
-    wget.download(apod.url, image_path)
+    #wget.download(apod.url, image_path)
 
     with open(os.path.join(subdir, f'{apod.title}'), 'w+') as f:
         f.writelines('%s\n' % line for line in apod.info)
 
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+    # enter base directory, into which image will be downloaded
     download_image()

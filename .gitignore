@@ -130,3 +130,6 @@ dmypy.json
 
 # JetBrains stuff
 .idea
+
+# Don't accidentally add the output folder
+apod/
