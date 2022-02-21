@@ -1,3 +1,5 @@
+"""Downloads Astronomy Picture of the Day into a directory .../apod/[yyyy-mm] using one of NASA's public APIs"""
+
 import datetime
 import os
 import re
@@ -8,6 +10,11 @@ from bs4 import BeautifulSoup
 
 
 class APOD:
+    """ Using info from the text gathered from the API, the APOD class contains information about the picture's:
+        1. URL (from which it can be downloaded)
+        2. Title
+        3. Extension (filetype)
+        4. Info (e.g. an explanation of the photo)"""
     def __new__(self, page_text: str):
         # Using regex to find image URL from full text
         url = re.search('https://apod\.nasa\.gov.*?\.[a-z]{3}', page_text)
@@ -92,5 +99,5 @@ def download_image(basedir: str = os.path.dirname(__file__)):
 
 
 if __name__ == '__main__':
-    # enter base directory, into which image will be downloaded
+    # enter base directory as a string into `download_image()`, into which image will be downloaded
     download_image()
