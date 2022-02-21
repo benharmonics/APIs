@@ -75,7 +75,7 @@ def get_page_text() -> str:
 
 
 def download_image(basedir: str = os.path.dirname(__file__)):
-    def month_dir() -> str:
+    def current_month() -> str:
         date = str(datetime.date.today())
         y, m, _d = date.split('-')
         return f'{y}-{m}'
@@ -87,7 +87,7 @@ def download_image(basedir: str = os.path.dirname(__file__)):
     if not os.path.exists(download_path):
         os.mkdir(download_path)
 
-    subdir = os.path.join(download_path, month_dir())
+    subdir = os.path.join(download_path, current_month())
     if not os.path.exists(subdir):
         os.mkdir(subdir)
 
