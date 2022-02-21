@@ -3,6 +3,7 @@ import os
 import re
 
 import requests
+import wget
 from bs4 import BeautifulSoup
 
 
@@ -84,7 +85,7 @@ def download_image(basedir: str = os.path.dirname(__file__)):
         os.mkdir(subdir)
 
     image_path = os.path.join(subdir, f'{apod.title}.{apod.extension}')
-    #wget.download(apod.url, image_path)
+    wget.download(apod.url, image_path)
 
     with open(os.path.join(subdir, f'{apod.title}'), 'w+') as f:
         f.writelines('%s\n' % line for line in apod.info)
