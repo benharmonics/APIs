@@ -15,17 +15,20 @@ class APOD:
         2. Title
         3. Extension (filetype)
         4. Info (e.g. an explanation of the photo)"""
+
     def __new__(self, page_text: str):
         # Using regex to find image URL from full text
         url = re.search('https://apod\.nasa\.gov.*?\.[a-z]{3}', page_text)
         if not url:
             print('ERROR: Image URL not found.')
+            quit()
         url = url[0]
 
         # Getting filename from url, e.g. `example.jpg`
         filename = re.search('[A-Za-z0-9_-]*\.[a-z]{3}$', url)
         if not filename:
             print('ERROR: filename not parsed from url.')
+            quit()
         filename = filename[0]
 
         # i.e. `example.jpg` => `example`, `jpg`
