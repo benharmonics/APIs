@@ -1,0 +1,11 @@
+[project]
+name = "apis"
+version = "0.1.0"
+description = "Various API interactions"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "beautifulsoup4>=4.14.2",
+    "requests>=2.32.5",
+    "wget>=3.2",
+]
