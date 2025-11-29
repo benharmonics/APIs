@@ -13,9 +13,7 @@ from bs4 import BeautifulSoup
 
 def _page_text() -> str:
     """Gets raw API text and removes extraneous characters"""
-    # Get raw HTML from webpage
     page = requests.get("https://api.nasa.gov/planetary/apod", {"api_key": "DEMO_KEY"})
-    # Parse raw HTML into a BeautifulSoup Object
     soup = BeautifulSoup(page.content, "html.parser")
     # We're using an API, so we're just using everything on the page.
     return re.sub('[{}\n"]', "", soup.text)
@@ -30,11 +28,8 @@ def _parse_page_text(page_text: str) -> list[str]:
     explanation_i = [i for i, line in enumerate(info) if "explanation:" in line][0]
     # end of `explanation` section ends at the `hdurl` section
     explanation_f = [i for i, line in enumerate(info) if "hdurl:" in line][0] - 1
-
     # collecting the `explanation` section into a single string
-    explanation = ""
-    for line in info[explanation_i:explanation_f]:
-        explanation += line
+    explanation = "".join([line for line in info[explanation_i:explanation_f]])
 
     # correcting the split(',') problem by subbing our `explanation` string and getting rid of extra lines
     result = [line for line in info if ":" in line.split()[0]]
