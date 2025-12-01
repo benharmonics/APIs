@@ -5,6 +5,7 @@ description = "Various API interactions"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
+    "opencv-python>=4.12.0.88",
     "requests>=2.32.5",
     "wget>=3.2",
 ]
